@@ -1,17 +1,22 @@
 const express = require('express');
+const Joi = require('@hapi/joi');
+
 const router = express.Router();
 const User = require('../model/user.model');
+const validator = require('express-joi-validation').createValidator({});
+
+const userSchema = Joi.object({
+  id: Joi.number().required(),
+  login: Joi.string().required(),
+  password: Joi.string().required(),
+  age: Joi.number().required(),
+});
 
 // Static users
 const users = [
   new User(1, 'John', '123', 22, false),
   new User(2, 'Jane', '321', 23, false),
 ];
-
-/** TODO: REMOVE ME AT THE END */
-router.get('/', (req, res, next) => {
-  res.json({ users });
-});
 
 /**
  * Get user by ID
@@ -26,18 +31,21 @@ router.get('/:id', (req, res, next) => {
  * Create user.
  * Type: ../model/User
  */
-router.post('', (req, res, next) => {
+router.post('', validator.body(userSchema), (req, res, next) => {
   const { id, login, password, age } = req.body;
+  const userFound = users.find((user) => user.id === +id);
+  if (userFound) {
+    res.status(400).json({ message: 'User with same id already exists' });
+  }
   const user = new User(id, login, password, age, false);
   users.push(user);
-  // TODO ADD USER VALIDATION.
   res.json({ user, message: 'User created' });
 });
 
 /**
  * Updates an user.
  */
-router.put('/:id', (req, res, next) => {
+router.put('/:id', validator.body(userSchema), (req, res, next) => {
   const { id } = req.params;
   const userIndex = users.findIndex((user) => user.id === +id);
   if (userIndex > 0) {
