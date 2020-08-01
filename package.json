@@ -1,0 +1,25 @@
+{
+  "name": "e-node-task2",
+  "version": "1.0.0",
+  "description": "Task 2 of node course",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Alekzv9/e-node-task2.git"
+  },
+  "author": "Alejandro Valdivia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Alekzv9/e-node-task2/issues"
+  },
+  "homepage": "https://github.com/Alekzv9/e-node-task2#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
