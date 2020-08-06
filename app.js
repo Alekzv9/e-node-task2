@@ -6,7 +6,7 @@ const app = express();
 app.use(bodyParser.json());
 
 // Routes
-const userRoutes = require('./routes/user');
+const userRoutes = require('./controllers/user.controller');
 
 app.use('/user', userRoutes);
 
