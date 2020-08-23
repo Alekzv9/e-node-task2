@@ -2,7 +2,7 @@ import User from '../models/user.model';
 import Sequelize from 'sequelize';
 const Op = Sequelize.Op;
 
-exports.createUser = async (userData) => {
+exports.createUser = async (userData: any) => {
   const { login, password, age } = userData;
   try {
     const newUser = await User.create({
@@ -19,7 +19,7 @@ exports.createUser = async (userData) => {
   }
 };
 
-exports.updateUser = async (id, userData) => {
+exports.updateUser = async (id: number, userData: any) => {
   try {
     const user = await getUser(id);
     if (user) {
@@ -38,7 +38,7 @@ exports.updateUser = async (id, userData) => {
   }
 };
 
-exports.deleteUser = async (id) => {
+exports.deleteUser = async (id: number) => {
   try {
     const user = await getUser(id);
     if (user) {
@@ -54,7 +54,7 @@ exports.deleteUser = async (id) => {
   }
 };
 
-exports.getSuggestedUsers = async (filterData) => {
+exports.getSuggestedUsers = async (filterData: any) => {
   const { login: filter, limit } = filterData;
   const users = await User.findAll({
     where: {
@@ -67,7 +67,7 @@ exports.getSuggestedUsers = async (filterData) => {
   return users;
 };
 
-const getUser = async (id) => {
+const getUser = async (id: number) => {
   const user = await User.findOne({
     where: {
       id,

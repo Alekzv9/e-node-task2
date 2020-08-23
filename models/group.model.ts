@@ -11,6 +11,13 @@ const Group = sequelize.define('group', {
   },
   permissions: {
     type: Sequelize.TEXT,
+    get() {
+      // @ts-ignore
+      const permissionArray: string[] = this.getDataValue('permissions').split(
+        ','
+      );
+      return permissionArray;
+    },
   },
 });
 

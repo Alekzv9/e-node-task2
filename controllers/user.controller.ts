@@ -61,7 +61,7 @@ router.post('/auto-suggest', async (req, res, next) => {
  */
 router.delete('/:id', async (req, res) => {
   const { id } = req.params;
-  const response = await UserService.deleteUser(id, req.body);
+  const response = await UserService.deleteUser(id);
   let status = 200;
   if (!response.user) {
     status = 400;
