@@ -1,4 +1,4 @@
-const express = require('express');
+import express from 'express';
 const Joi = require('@hapi/joi');
 
 const router = express.Router();
