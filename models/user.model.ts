@@ -22,4 +22,11 @@ const User = sequelize.define('user', {
   },
 });
 
+User.associate = (models: any) => {
+  User.belongsToMany(models.group, {
+    through: 'usergroup',
+    foreignKey: 'user_id',
+  });
+};
+
 export default User;

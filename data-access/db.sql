@@ -9,3 +9,18 @@ CREATE TABLE IF NOT EXISTS users(
 
 INSERT INTO users VALUES (1, 'John', '123', 22, false); 
 INSERT INTO users VALUES (2, 'Jane', '321', 23, false);
+
+
+CREATE TABLE IF NOT EXISTS groups(
+    id text primary key,
+    name text,
+    permissions text
+);
+
+INSERT INTO groups VALUES('1', 'A', 'READ,WRITE');
+
+CREATE TABLE IF NOT EXISTS usergroups(
+    userid INTEGER NOT NULL REFERENCES users (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    groupid text NOT NULL REFERENCES groups (id) ON DELETE CASCADE ON UPDATE CASCADE,
+    PRIMARY KEY (userid, groupid)
+);

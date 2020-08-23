@@ -3,6 +3,7 @@ const Joi = require('@hapi/joi');
 
 const router = express.Router();
 const UserService = require('../services/user.service');
+const UserGroupService = require('../services/user-group.service');
 const validator = require('express-joi-validation').createValidator({});
 
 const userSchema = Joi.object({
@@ -64,6 +65,15 @@ router.delete('/:id', async (req, res) => {
   const response = await UserService.deleteUser(id);
   let status = 200;
   if (!response.user) {
+    status = 400;
+  }
+  res.status(status).json(response);
+});
+
+router.post('/addUsersToGroup', async (req, res) => {
+  const response = await UserGroupService.createUserGroup(req.body);
+  let status = 200;
+  if (!response.group) {
     status = 400;
   }
   res.status(status).json(response);

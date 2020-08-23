@@ -7,8 +7,10 @@ app.use(bodyParser.json());
 
 // Routes
 const userRoutes = require('./controllers/user.controller');
+const groupRoutes = require('./controllers/group.controller');
 
 app.use('/user', userRoutes);
+app.use('/group', groupRoutes);
 
 app.listen(8000, () => {
   console.log('Server running');
