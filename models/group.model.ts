@@ -25,6 +25,7 @@ Group.associate = (models: any) => {
   Group.belongsToMany(models.user, {
     through: 'usergroup',
     foreignKey: 'group_id',
+    onDelete: 'cascade',
   });
 };
 
