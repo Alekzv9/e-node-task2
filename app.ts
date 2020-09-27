@@ -1,5 +1,6 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
+
 const app = express();
 
 // Middlewares
@@ -10,4 +11,6 @@ const userRoutes = require('./controllers/user.controller');
 
 app.use('/user', userRoutes);
 
-app.listen(8000);
+app.listen(8000, () => {
+  console.log('Server started.');
+});

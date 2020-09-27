@@ -1,5 +1,5 @@
-const express = require('express');
-const Joi = require('@hapi/joi');
+import express, { Request, Response } from 'express';
+import Joi from '@hapi/joi';
 
 const router = express.Router();
 const UserService = require('../services/user.service');
@@ -12,11 +12,19 @@ const userSchema = Joi.object({
 });
 
 /**
+ * Get all users.
+ */
+router.get('', (req: Request, res: Response) => {
+  const users = UserService.getUsers();
+  res.json({ users });
+});
+
+/**
  * Get user by ID
  */
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = await UserService.getUser(+id);
+  const user = UserService.getUser(+id);
   res.json({ user });
 });
 
@@ -24,8 +32,8 @@ router.get('/:id', async (req, res) => {
  * Create user.
  * Type: ../model/User
  */
-router.post('', validator.body(userSchema), async (req, res, next) => {
-  const response = await UserService.createUser(req.body);
+router.post('', validator.body(userSchema), (req: Request, res: Response) => {
+  const response = UserService.createUser(req.body);
   let status = 200;
   if (!response.user) {
     status = 400;
@@ -36,9 +44,9 @@ router.post('', validator.body(userSchema), async (req, res, next) => {
 /**
  * Updates an user.
  */
-router.put('/:id', validator.body(userSchema), async (req, res) => {
+router.put('/:id', validator.body(userSchema), (req, res) => {
   const { id } = req.params;
-  const response = await UserService.updateUser(id, req.body);
+  const response = UserService.updateUser(id, req.body);
   let status = 200;
   if (!response.user) {
     status = 400;
@@ -51,17 +59,17 @@ router.put('/:id', validator.body(userSchema), async (req, res) => {
  * limit: number of users to retrieve.
  * loginSubstring: query string.
  */
-router.post('/auto-suggest', async (req, res, next) => {
-  const response = await UserService.getSuggestedUsers(req.body);
+router.post('/auto-suggest', (req, res, next) => {
+  const response = UserService.getSuggestedUsers(req.body);
   res.json({ users: response });
 });
 
 /**
  * Soft delete a User.
  */
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', (req, res) => {
   const { id } = req.params;
-  const response = await UserService.deleteUser(id, req.body);
+  const response = UserService.deleteUser(id, req.body);
   let status = 200;
   if (!response.user) {
     status = 400;
