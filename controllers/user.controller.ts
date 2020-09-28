@@ -1,14 +1,17 @@
 import express, { Request, Response } from 'express';
 import Joi from '@hapi/joi';
+import { createValidator } from 'express-joi-validation';
 
 const router = express.Router();
 const UserService = require('../services/user.service');
-const validator = require('express-joi-validation').createValidator({});
+const validator = createValidator();
 
 const userSchema = Joi.object({
   login: Joi.string().required(),
-  password: Joi.string().required(),
-  age: Joi.number().required(),
+  password: Joi.string()
+    .regex(/^[a-z0-9]+$/i)
+    .required(),
+  age: Joi.number().min(4).max(130).required(),
 });
 
 /**
