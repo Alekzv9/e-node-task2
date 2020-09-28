@@ -38,7 +38,7 @@ exports.deleteUser = (id: number) => {
   const user = getUser(id);
   if (user) {
     user.isDeleted = true;
-    return { users };
+    return { user };
   } else {
     return { msg: 'User not found.' };
   }
