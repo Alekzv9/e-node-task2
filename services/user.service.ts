@@ -1,6 +1,14 @@
 import User from '../models/user.model';
 
-const users: User[] = [];
+const users: User[] = [
+  {
+    id: '0',
+    age: 54,
+    isDeleted: false,
+    login: 'Je',
+    password: '123',
+  },
+];
 
 exports.createUser = (userData: User) => {
   const user = users.find((usr) => usr.login === userData.login);
@@ -36,17 +44,21 @@ exports.deleteUser = (id: number) => {
   }
 };
 
-exports.getAutoSuggestUsers = (loginSubstring: string, limit: number) => {};
+exports.getAutoSuggestUsers = (loginSubstring: string, limit: number) => {
+  const regex = new RegExp(`^${loginSubstring}`, 'i');
+  const filtered = users
+    .filter((usr) => usr.login.match(regex))
+    .splice(0, limit);
+  return filtered;
+};
 
 exports.getUsers = () => {
   return users.slice();
 };
 
-const getUser = (id: number) => {
-  const user = users.find((usr) => +usr.id === id);
-  return user;
-};
+exports.getUser = (id: number) => getUser(id);
 
-exports.getUser = (id: number) => {
-  return { user: getUser(id) };
+const getUser = (id: number) => {
+  const user = users.find((usr) => +usr.id == id);
+  return user;
 };

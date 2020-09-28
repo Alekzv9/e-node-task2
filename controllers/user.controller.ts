@@ -44,7 +44,7 @@ router.post('', validator.body(userSchema), (req: Request, res: Response) => {
 /**
  * Updates an user.
  */
-router.put('/:id', validator.body(userSchema), (req, res) => {
+router.put('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
   const response = UserService.updateUser(id, req.body);
   let status = 200;
@@ -59,15 +59,16 @@ router.put('/:id', validator.body(userSchema), (req, res) => {
  * limit: number of users to retrieve.
  * loginSubstring: query string.
  */
-router.post('/auto-suggest', (req, res, next) => {
-  const response = UserService.getSuggestedUsers(req.body);
+router.post('/auto-suggest', (req: Request, res: Response) => {
+  const { loginSubstring, limit } = req.body;
+  const response = UserService.getAutoSuggestUsers(loginSubstring, limit);
   res.json({ users: response });
 });
 
 /**
  * Soft delete a User.
  */
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (req: Request, res: Response) => {
   const { id } = req.params;
   const response = UserService.deleteUser(id, req.body);
   let status = 200;
