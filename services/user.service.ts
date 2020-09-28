@@ -45,7 +45,7 @@ exports.deleteUser = (id: number) => {
 };
 
 exports.getAutoSuggestUsers = (loginSubstring: string, limit: number) => {
-  const regex = new RegExp(`^${loginSubstring}`, 'i');
+  const regex = new RegExp(`${loginSubstring}`, 'g');
   const filtered = users
     .filter((usr) => usr.login.match(regex))
     .splice(0, limit);
