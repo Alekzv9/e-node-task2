@@ -1,32 +1,32 @@
-import Sequelize from 'sequelize';
-import { sequelize } from '../data-access/database';
+import * as Sequelize from 'sequelize';
+import { sequelize } from '../data-access/datababase';
 
 const User = sequelize.define('user', {
   id: {
     type: Sequelize.INTEGER,
     primaryKey: true,
-    autoIncrement: true,
+    autoIncrement: true
   },
   login: {
-    type: Sequelize.TEXT,
+    type: Sequelize.TEXT
   },
   password: {
-    type: Sequelize.TEXT,
+    type: Sequelize.TEXT
   },
   age: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER
   },
   isdeleted: {
     type: Sequelize.BOOLEAN,
-    defaultValue: false,
-  },
+    defaultValue: false
+  }
 });
 
-User.associate = (models: any) => {
-  User.belongsToMany(models.group, {
-    through: 'usergroup',
-    foreignKey: 'user_id',
-  });
-};
+// User.associate = (models: any) => {
+//   User.belongsToMany(models.group, {
+//     through: 'usergroup',
+//     foreignKey: 'user_id'
+//   });
+// };
 
 export default User;

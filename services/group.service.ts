@@ -19,7 +19,7 @@ exports.createGroup = async (groupData: any) => {
 
 exports.updateGroup = async (id: string, groupData: any) => {
   try {
-    const group = await getGroup(id);
+    const group: any = await getGroup(id);
     if (group) {
       const { name, permissions } = groupData;
       group.name = name;

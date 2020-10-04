@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+import { Sequelize } from 'sequelize';
 
 export const sequelize = new Sequelize('coursedb', 'postgres', 'admin', {
   host: 'localhost',
@@ -6,9 +6,9 @@ export const sequelize = new Sequelize('coursedb', 'postgres', 'admin', {
   pool: {
     max: 5,
     min: 0,
-    idle: 10000,
+    idle: 10000
   },
   define: {
-    timestamps: false,
-  },
+    timestamps: false
+  }
 });

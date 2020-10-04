@@ -1,6 +1,8 @@
-const express = require('express');
-const bodyParser = require('body-parser');
+import express from 'express';
+import bodyParser from 'body-parser';
+
 const app = express();
+const PORT = 8000;
 
 // Middlewares
 app.use(bodyParser.json());
@@ -12,6 +14,6 @@ const groupRoutes = require('./controllers/group.controller');
 app.use('/user', userRoutes);
 app.use('/group', groupRoutes);
 
-app.listen(8000, () => {
-  console.log('Server running');
+app.listen(PORT, () => {
+  console.log('Server started.');
 });

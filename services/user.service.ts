@@ -5,26 +5,33 @@ const Op = Sequelize.Op;
 exports.createUser = async (userData: any) => {
   const { login, password, age } = userData;
   try {
-    const newUser = await User.create({
-      login,
-      password,
-      age,
+    const user = await User.findOne({
+      where: {
+        login
+      },
+      attributes: ['id', 'login', 'age']
     });
-    if (newUser) {
+    console.log(user);
+    if (user) {
+      return { message: 'User login duplicated' };
+    } else {
+      const newUser = await User.create({
+        login,
+        password,
+        age
+      });
       return { message: 'User created', user: newUser };
     }
   } catch (e) {
-    console.log(e);
     return { message: 'User creation failed' };
   }
 };
 
 exports.updateUser = async (id: number, userData: any) => {
   try {
-    const user = await getUser(id);
-    if (user) {
-      const { login, password, age } = userData;
-      user.login = login;
+    const user: any = await getUser(id);
+    if (!user.message) {
+      const { password, age } = userData;
       user.password = password;
       user.age = age;
       await user.save();
@@ -40,7 +47,7 @@ exports.updateUser = async (id: number, userData: any) => {
 
 exports.deleteUser = async (id: number) => {
   try {
-    const user = await getUser(id);
+    const user: any = await getUser(id);
     if (user) {
       user.isdeleted = true;
       await user.save();
@@ -55,26 +62,36 @@ exports.deleteUser = async (id: number) => {
 };
 
 exports.getSuggestedUsers = async (filterData: any) => {
-  const { login: filter, limit } = filterData;
+  const { loginSubstring: filter, limit } = filterData;
   const users = await User.findAll({
     where: {
       login: {
-        [Op.like]: filter + '%',
-      },
+        [Op.like]: filter + '%'
+      }
     },
-    limit,
+    limit
   });
+  return users;
+};
+
+exports.getUsers = async () => {
+  const users = await User.findAll();
   return users;
 };
 
 const getUser = async (id: number) => {
   const user = await User.findOne({
     where: {
-      id,
+      id
     },
-    attributes: ['id', 'login', 'age'],
+    attributes: ['id', 'login', 'age']
   });
-  return user;
+
+  if (user) {
+    return user;
+  } else {
+    return { user, message: 'User not found.' };
+  }
 };
 
 exports.getUser = getUser;

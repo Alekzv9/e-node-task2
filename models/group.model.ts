@@ -1,13 +1,13 @@
 import Sequelize from 'sequelize';
-import { sequelize } from '../data-access/database';
+import { sequelize } from '../data-access/datababase';
 
 const Group = sequelize.define('group', {
   id: {
     type: Sequelize.TEXT,
-    primaryKey: true,
+    primaryKey: true
   },
   name: {
-    type: Sequelize.TEXT,
+    type: Sequelize.TEXT
   },
   permissions: {
     type: Sequelize.TEXT,
@@ -17,15 +17,15 @@ const Group = sequelize.define('group', {
         ','
       );
       return permissionArray;
-    },
-  },
+    }
+  }
 });
 
-Group.associate = (models: any) => {
-  Group.belongsToMany(models.user, {
-    through: 'usergroup',
-    foreignKey: 'group_id',
-  });
-};
+// Group.associate = (models: any) => {
+//   Group.belongsToMany(models.user, {
+//     through: 'usergroup',
+//     foreignKey: 'group_id',
+//   });
+// };
 
 export default Group;

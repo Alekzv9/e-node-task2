@@ -9,7 +9,7 @@ const validator = require('express-joi-validation').createValidator({});
 const userSchema = Joi.object({
   login: Joi.string().required(),
   password: Joi.string().required(),
-  age: Joi.number().required(),
+  age: Joi.number().required()
 });
 
 /**
