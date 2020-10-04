@@ -1,64 +1,98 @@
 import User from '../models/user.model';
+import Sequelize from 'sequelize';
+const Op = Sequelize.Op;
 
-const users: User[] = [
-  {
-    id: '0',
-    age: 54,
-    isDeleted: false,
-    login: 'Je',
-    password: '123',
-  },
-];
-
-exports.createUser = (userData: User) => {
-  const user = users.find((usr) => usr.login === userData.login);
-  if (user) {
-    return { msg: 'User duplicated.' };
+exports.createUser = async (userData: any) => {
+  const { login, password, age } = userData;
+  try {
+    const user = await User.findOne({
+      where: {
+        login
+      },
+      attributes: ['id', 'login', 'age']
+    });
+    console.log(user);
+    if (user) {
+      return { message: 'User login duplicated' };
+    } else {
+      const newUser = await User.create({
+        login,
+        password,
+        age
+      });
+      return { message: 'User created', user: newUser };
+    }
+  } catch (e) {
+    return { message: 'User creation failed' };
   }
-  userData.isDeleted = false;
-  userData.id = users.length.toString();
-  users.push(userData);
-  return { user: userData };
 };
 
-exports.updateUser = (id: number, userData: User) => {
-  const user = getUser(id);
+exports.updateUser = async (id: number, userData: any) => {
+  try {
+    const user: any = await getUser(id);
+    if (!user.message) {
+      const { password, age } = userData;
+      user.password = password;
+      user.age = age;
+      await user.save();
+      return { message: 'User updated', user };
+    } else {
+      return { message: 'User not found' };
+    }
+  } catch (e) {
+    console.log(e);
+    return { message: 'User update failed' };
+  }
+};
+
+exports.deleteUser = async (id: number) => {
+  try {
+    const user: any = await getUser(id);
+    if (user) {
+      user.isdeleted = true;
+      await user.save();
+      return { message: 'User deleted', user };
+    } else {
+      return { message: 'User not found' };
+    }
+  } catch (e) {
+    console.log(e);
+    return { message: 'User delete failed' };
+  }
+};
+
+exports.getSuggestedUsers = async (filterData: any) => {
+  const { loginSubstring: filter, limit } = filterData;
+  console.log(filter, limit);
+  const users = await User.findAll({
+    where: {
+      login: {
+        [Op.like]: filter + '%'
+      }
+    },
+    limit
+  });
+  return users;
+};
+
+exports.getUsers = async () => {
+  const users = await User.findAll();
+  return users;
+};
+
+const getUser = async (id: number) => {
+  const user = await User.findOne({
+    where: {
+      id
+    },
+    attributes: ['id', 'login', 'age']
+  });
+
   if (user) {
-    user.age = userData.age;
-    user.password = userData.password;
-    const index = users.findIndex((usr) => +usr.id === id);
-    users[index] = user;
-    return { user };
+    return user;
   } else {
-    return { msg: 'User not found.' };
+    return { user, message: 'User not found.' };
   }
 };
 
-exports.deleteUser = (id: number) => {
-  const user = getUser(id);
-  if (user) {
-    user.isDeleted = true;
-    return { user };
-  } else {
-    return { msg: 'User not found.' };
-  }
-};
-
-exports.getAutoSuggestUsers = (loginSubstring: string, limit: number) => {
-  const regex = new RegExp(`${loginSubstring}`, 'g');
-  const filtered = users
-    .filter((usr) => usr.login.match(regex))
-    .splice(0, limit);
-  return filtered;
-};
-
-exports.getUsers = () => {
-  return users.slice();
-};
-
-exports.getUser = (id: number) => getUser(id);
-
-const getUser = (id: number) => {
-  const user = users.find((usr) => +usr.id == id);
-  return user;
-};
+exports.getUser = getUser;

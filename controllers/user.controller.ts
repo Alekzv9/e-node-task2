@@ -11,69 +11,80 @@ const userSchema = Joi.object({
   password: Joi.string()
     .regex(/^[a-z0-9]+$/i)
     .required(),
-  age: Joi.number().min(4).max(130).required(),
-});
-
-/**
- * Get all users.
- */
-router.get('', (req: Request, res: Response) => {
-  const users = UserService.getUsers();
-  res.json({ users });
+  age: Joi.number().min(4).max(130).required()
 });
 
 /**
  * Get user by ID
  */
-router.get('/:id', (req: Request, res: Response) => {
+router.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const user = UserService.getUser(+id);
-  res.json({ user });
+  const response = await UserService.getUser(+id);
+  let status = 200;
+  if (!response.user) {
+    status = 400;
+  }
+  res.status(status).json(response);
+});
+
+/**
+ * Get all users.
+ */
+router.get('', async (req: Request, res: Response) => {
+  const response = await UserService.getUsers();
+  res.json(response);
 });
 
 /**
  * Create user.
  * Type: ../model/User
  */
-router.post('', validator.body(userSchema), (req: Request, res: Response) => {
-  const response = UserService.createUser(req.body);
-  let status = 200;
-  if (!response.user) {
-    status = 400;
+router.post(
+  '',
+  validator.body(userSchema),
+  async (req: Request, res: Response) => {
+    const response = await UserService.createUser(req.body);
+    let status = 200;
+    if (!response.user) {
+      status = 400;
+    }
+    res.status(status).json(response);
   }
-  res.status(status).json(response);
-});
+);
 
 /**
  * Updates an user.
  */
-router.put('/:id', (req: Request, res: Response) => {
-  const { id } = req.params;
-  const response = UserService.updateUser(id, req.body);
-  let status = 200;
-  if (!response.user) {
-    status = 400;
+router.put(
+  '/:id',
+  validator.body(userSchema),
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const response = await UserService.updateUser(id, req.body);
+    let status = 200;
+    if (!response.user) {
+      status = 400;
+    }
+    res.status(status).json(response);
   }
-  res.status(status).json(response);
-});
+);
 
 /**
  * Returns list of auto suggested users
  * limit: number of users to retrieve.
  * loginSubstring: query string.
  */
-router.post('/auto-suggest', (req: Request, res: Response) => {
-  const { loginSubstring, limit } = req.body;
-  const response = UserService.getAutoSuggestUsers(loginSubstring, limit);
+router.post('/auto-suggest', async (req: Request, res: Response) => {
+  const response = await UserService.getSuggestedUsers(req.body);
   res.json({ users: response });
 });
 
 /**
  * Soft delete a User.
  */
-router.delete('/:id', (req: Request, res: Response) => {
+router.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params;
-  const response = UserService.deleteUser(id, req.body);
+  const response = await UserService.deleteUser(id, req.body);
   let status = 200;
   if (!response.user) {
     status = 400;

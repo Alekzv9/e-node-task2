@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 
 const app = express();
+const PORT = 8000;
 
 // Middlewares
 app.use(bodyParser.json());
@@ -11,6 +12,6 @@ const userRoutes = require('./controllers/user.controller');
 
 app.use('/user', userRoutes);
 
-app.listen(8000, () => {
+app.listen(PORT, () => {
   console.log('Server started.');
 });

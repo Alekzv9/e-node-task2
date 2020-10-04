@@ -1,13 +1,13 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true,
+    es2021: true
   },
   extends: ['google'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 12,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: ['@typescript-eslint'],
   rules: {
@@ -17,5 +17,6 @@ module.exports = {
     'object-curly-spacing': 0,
     indent: 0,
     semi: 0,
-  },
+    'comma-dangle': 0
+  }
 };
