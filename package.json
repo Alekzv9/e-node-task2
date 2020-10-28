@@ -1,7 +1,7 @@
 {
   "name": "e-node-task2",
   "version": "1.0.0",
-  "description": "Task 2 of node course",
+  "description": "Tasks of node course",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.ts",

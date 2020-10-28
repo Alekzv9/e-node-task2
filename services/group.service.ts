@@ -6,13 +6,12 @@ exports.createGroup = async (groupData: any) => {
     const newGroup = await Group.create({
       id,
       name,
-      permissions: permissions.join(','),
+      permissions: permissions.join(',')
     });
     if (newGroup) {
       return { message: 'Group created', group: newGroup };
     }
   } catch (e) {
-    console.log(e);
     return { message: 'Group creation failed' };
   }
 };
@@ -30,7 +29,6 @@ exports.updateGroup = async (id: string, groupData: any) => {
       return { message: 'Group not found' };
     }
   } catch (e) {
-    console.log(e);
     return { message: 'Group update failed' };
   }
 };
@@ -45,13 +43,13 @@ exports.deleteGroup = async (id: string) => {
       return { message: 'Group not found' };
     }
   } catch (e) {
-    console.log('deleteGroup', e);
+    return { message: 'Group deletion failed' };
   }
 };
 
 exports.getGroups = async () => {
   const groups = await Group.findAll({
-    attributes: ['id', 'name', 'permissions'],
+    attributes: ['id', 'name', 'permissions']
   });
   return groups;
 };
@@ -59,9 +57,9 @@ exports.getGroups = async () => {
 const getGroup = async (id: string) => {
   const group = await Group.findOne({
     where: {
-      id,
+      id
     },
-    attributes: ['id', 'name', 'permissions'],
+    attributes: ['id', 'name', 'permissions']
   });
   return group;
 };

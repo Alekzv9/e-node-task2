@@ -11,7 +11,7 @@ exports.createUser = async (userData: any) => {
       },
       attributes: ['id', 'login', 'age']
     });
-    console.log(user);
+
     if (user) {
       return { message: 'User login duplicated' };
     } else {
@@ -40,7 +40,6 @@ exports.updateUser = async (id: number, userData: any) => {
       return { message: 'User not found' };
     }
   } catch (e) {
-    console.log(e);
     return { message: 'User update failed' };
   }
 };
@@ -56,7 +55,6 @@ exports.deleteUser = async (id: number) => {
       return { message: 'User not found' };
     }
   } catch (e) {
-    console.log(e);
     return { message: 'User delete failed' };
   }
 };
