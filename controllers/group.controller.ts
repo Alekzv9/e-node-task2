@@ -1,10 +1,10 @@
 import express from 'express';
 import { controllerLogger } from '../utils/logger';
 
-const router = express.Router();
+const groupRoutes = express.Router();
 const GroupService = require('../services/group.service');
 
-router.get('/:id', async (req, res, next) => {
+groupRoutes.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const group = await GroupService.getGroup(id);
@@ -15,7 +15,7 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.get('', async (req, res, next) => {
+groupRoutes.get('', async (req, res, next) => {
   try {
     const groups = await GroupService.getGroups();
     return res.json({ groups });
@@ -25,7 +25,7 @@ router.get('', async (req, res, next) => {
   }
 });
 
-router.post('', async (req, res, next) => {
+groupRoutes.post('', async (req, res, next) => {
   try {
     const response = await GroupService.createGroup(req.body);
 
@@ -36,7 +36,7 @@ router.post('', async (req, res, next) => {
   }
 });
 
-router.put('/:id', async (req, res, next) => {
+groupRoutes.put('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const response = await GroupService.updateGroup(id, req.body);
@@ -48,7 +48,7 @@ router.put('/:id', async (req, res, next) => {
   }
 });
 
-router.delete('/:id', async (req, res, next) => {
+groupRoutes.delete('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const response = await GroupService.deleteGroup(id);
@@ -60,4 +60,4 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default groupRoutes;

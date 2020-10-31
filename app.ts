@@ -1,8 +1,8 @@
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import bodyParser from 'body-parser';
 import errorHandler from './utils/error';
-const userRoutes = require('./controllers/user.controller');
-const groupRoutes = require('./controllers/group.controller');
+import userRoutes from './controllers/user.controller';
+import groupRoutes from './controllers/group.controller';
 
 const app = express();
 const PORT = 8000;
@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use('/user', userRoutes);
 app.use('/group', groupRoutes);
 
-app.use((error: any, req: any, res: any, next: any) => {
+app.use((error: any, req: Request, res: Response, _: NextFunction) => {
   errorHandler(error, res);
 });
 
