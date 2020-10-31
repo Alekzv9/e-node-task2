@@ -1,6 +1,8 @@
 import UserGroup from '../models/usergroup.model';
+import { serviceLogger } from '../utils/logger';
 
 exports.createUserGroup = async (data: any) => {
+  serviceLogger('createUserGroup', data);
   const { userIds, groupId } = data;
   try {
     // @ts-ignore

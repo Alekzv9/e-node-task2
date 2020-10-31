@@ -1,8 +1,11 @@
 import User from '../models/user.model';
 import Sequelize from 'sequelize';
+import { serviceLogger } from '../utils/logger';
+
 const Op = Sequelize.Op;
 
 exports.createUser = async (userData: any) => {
+  serviceLogger('createUser', userData);
   const { login, password, age } = userData;
   try {
     const user = await User.findOne({
@@ -28,6 +31,7 @@ exports.createUser = async (userData: any) => {
 };
 
 exports.updateUser = async (id: number, userData: any) => {
+  serviceLogger('updateUser', { id, userData });
   try {
     const user: any = await getUser(id);
     if (!user.message) {
@@ -45,6 +49,7 @@ exports.updateUser = async (id: number, userData: any) => {
 };
 
 exports.deleteUser = async (id: number) => {
+  serviceLogger('deleteUser', { id });
   try {
     const user: any = await getUser(id);
     if (user) {
@@ -60,6 +65,7 @@ exports.deleteUser = async (id: number) => {
 };
 
 exports.getSuggestedUsers = async (filterData: any) => {
+  serviceLogger('getSuggestedUsers', { filterData });
   const { loginSubstring: filter, limit } = filterData;
   const users = await User.findAll({
     where: {
@@ -73,11 +79,13 @@ exports.getSuggestedUsers = async (filterData: any) => {
 };
 
 exports.getUsers = async () => {
+  serviceLogger('getUsers');
   const users = await User.findAll();
   return users;
 };
 
 const getUser = async (id: number) => {
+  serviceLogger('getUser', { id });
   const user = await User.findOne({
     where: {
       id

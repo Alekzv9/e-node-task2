@@ -1,6 +1,8 @@
 import Group from '../models/group.model';
+import { serviceLogger } from '../utils/logger';
 
 exports.createGroup = async (groupData: any) => {
+  serviceLogger('createGroup', groupData);
   const { id, name, permissions } = groupData;
   try {
     const newGroup = await Group.create({
@@ -17,6 +19,7 @@ exports.createGroup = async (groupData: any) => {
 };
 
 exports.updateGroup = async (id: string, groupData: any) => {
+  serviceLogger('updateGroup', { id, groupData });
   try {
     const group: any = await getGroup(id);
     if (group) {
@@ -34,6 +37,7 @@ exports.updateGroup = async (id: string, groupData: any) => {
 };
 
 exports.deleteGroup = async (id: string) => {
+  serviceLogger('deleteGroup', { id });
   try {
     const group = await getGroup(id);
     if (group) {
@@ -48,6 +52,7 @@ exports.deleteGroup = async (id: string) => {
 };
 
 exports.getGroups = async () => {
+  serviceLogger('getGroups');
   const groups = await Group.findAll({
     attributes: ['id', 'name', 'permissions']
   });
@@ -55,6 +60,7 @@ exports.getGroups = async () => {
 };
 
 const getGroup = async (id: string) => {
+  serviceLogger('getGroup');
   const group = await Group.findOne({
     where: {
       id
@@ -63,4 +69,5 @@ const getGroup = async (id: string) => {
   });
   return group;
 };
+
 exports.getGroup = getGroup;
