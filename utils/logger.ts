@@ -54,4 +54,12 @@ const serviceLogger = (serviceName: string, args?: any) => {
   logger.log('info', `Service: ${serviceName} - ${stringArgs}}`);
 };
 
-export { logger, serviceLogger };
+const controllerLogger = (controllerName: string, args?: any) => {
+  let stringArgs = 'No arguments';
+  if (args) {
+    stringArgs = `Arguments ${JSON.stringify(args)}`;
+  }
+  logger.log('error', `Controller method: ${controllerName} - ${stringArgs}}`);
+};
+
+export { logger, serviceLogger, controllerLogger };

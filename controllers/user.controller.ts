@@ -1,4 +1,5 @@
 import express from 'express';
+import { controllerLogger, logger } from '../utils/logger';
 const Joi = require('@hapi/joi');
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.get('/:id', async (req, res, next) => {
     const user = await UserService.getUser(+id);
     return res.json({ user });
   } catch (err) {
+    controllerLogger(req.originalUrl, { params: req.params });
     next(err);
   }
 });
@@ -34,6 +36,7 @@ router.post('', validator.body(userSchema), async (req, res, next) => {
     const response = await UserService.createUser(req.body);
     return res.status(200).json(response);
   } catch (err) {
+    controllerLogger(req.originalUrl, { body: req.body });
     next(err);
   }
 });
@@ -48,6 +51,7 @@ router.put('/:id', validator.body(userSchema), async (req, res, next) => {
 
     return res.status(200).json(response);
   } catch (err) {
+    controllerLogger(req.originalUrl, { params: req.params });
     next(err);
   }
 });
@@ -62,6 +66,7 @@ router.post('/auto-suggest', async (req, res, next) => {
     const response = await UserService.getSuggestedUsers(req.body);
     return res.json({ users: response });
   } catch (err) {
+    controllerLogger(req.originalUrl, { params: req.body });
     next(err);
   }
 });
@@ -76,6 +81,7 @@ router.delete('/:id', async (req, res, next) => {
 
     return res.status(200).json(response);
   } catch (err) {
+    controllerLogger(req.originalUrl, { params: req.params });
     next(err);
   }
 });
@@ -86,6 +92,7 @@ router.post('/addUsersToGroup', async (req, res, next) => {
 
     return res.status(200).json(response);
   } catch (err) {
+    controllerLogger(req.originalUrl, { params: req.body });
     next(err);
   }
 });
