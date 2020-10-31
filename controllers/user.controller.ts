@@ -15,10 +15,14 @@ const userSchema = Joi.object({
 /**
  * Get user by ID
  */
-router.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const user = await UserService.getUser(+id);
-  res.json({ user });
+router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await UserService.getUser(+id);
+    return res.json({ user });
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
@@ -26,25 +30,26 @@ router.get('/:id', async (req, res) => {
  * Type: ../model/User
  */
 router.post('', validator.body(userSchema), async (req, res, next) => {
-  const response = await UserService.createUser(req.body);
-  let status = 200;
-  if (!response.user) {
-    status = 400;
+  try {
+    const response = await UserService.createUser(req.body);
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
   }
-  res.status(status).json(response);
 });
 
 /**
  * Updates an user.
  */
-router.put('/:id', validator.body(userSchema), async (req, res) => {
-  const { id } = req.params;
-  const response = await UserService.updateUser(id, req.body);
-  let status = 200;
-  if (!response.user) {
-    status = 400;
+router.put('/:id', validator.body(userSchema), async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const response = await UserService.updateUser(id, req.body);
+
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
   }
-  res.status(status).json(response);
 });
 
 /**
@@ -53,30 +58,36 @@ router.put('/:id', validator.body(userSchema), async (req, res) => {
  * loginSubstring: query string.
  */
 router.post('/auto-suggest', async (req, res, next) => {
-  const response = await UserService.getSuggestedUsers(req.body);
-  res.json({ users: response });
+  try {
+    const response = await UserService.getSuggestedUsers(req.body);
+    return res.json({ users: response });
+  } catch (err) {
+    next(err);
+  }
 });
 
 /**
  * Soft delete a User.
  */
-router.delete('/:id', async (req, res) => {
-  const { id } = req.params;
-  const response = await UserService.deleteUser(id);
-  let status = 200;
-  if (!response.user) {
-    status = 400;
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const response = await UserService.deleteUser(id);
+
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
   }
-  res.status(status).json(response);
 });
 
-router.post('/addUsersToGroup', async (req, res) => {
-  const response = await UserGroupService.createUserGroup(req.body);
-  let status = 200;
-  if (!response.group) {
-    status = 400;
+router.post('/addUsersToGroup', async (req, res, next) => {
+  try {
+    const response = await UserGroupService.createUserGroup(req.body);
+
+    return res.status(200).json(response);
+  } catch (err) {
+    next(err);
   }
-  res.status(status).json(response);
 });
 
 module.exports = router;
