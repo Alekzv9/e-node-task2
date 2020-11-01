@@ -2,13 +2,15 @@
  * Custom error class
  */
 export default class CustomError extends Error {
-  statusCode = 400;
+  statusCode: any;
   /**
    * @param {string} message Custom.
+   * @param {number} statusCode Custom status code;
    * @return {void}
    */
-  constructor(message: string) {
+  constructor(message: string, statusCode?: number) {
     super();
     this.message = message;
+    this.statusCode = statusCode;
   }
 }
