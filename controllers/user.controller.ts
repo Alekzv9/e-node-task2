@@ -1,5 +1,6 @@
 import express from 'express';
 import { controllerLogger } from '../utils/logger';
+import checkAuth from '../middleware/check-auth';
 const Joi = require('@hapi/joi');
 
 const userRoutes = express.Router();
@@ -16,7 +17,7 @@ const userSchema = Joi.object({
 /**
  * Get user by ID
  */
-userRoutes.get('/:id', async (req, res, next) => {
+userRoutes.get('/:id', checkAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const user = await UserService.getUser(+id);
@@ -44,24 +45,29 @@ userRoutes.post('', validator.body(userSchema), async (req, res, next) => {
 /**
  * Updates an user.
  */
-userRoutes.put('/:id', validator.body(userSchema), async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const response = await UserService.updateUser(id, req.body);
+userRoutes.put(
+  '/:id',
+  checkAuth,
+  validator.body(userSchema),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const response = await UserService.updateUser(id, req.body);
 
-    return res.status(200).json(response);
-  } catch (err) {
-    controllerLogger(req.originalUrl, { params: req.params });
-    next(err);
+      return res.status(200).json(response);
+    } catch (err) {
+      controllerLogger(req.originalUrl, { params: req.params });
+      next(err);
+    }
   }
-});
+);
 
 /**
  * Returns list of auto suggested users
  * limit: number of users to retrieve.
  * loginSubstring: query string.
  */
-userRoutes.post('/auto-suggest', async (req, res, next) => {
+userRoutes.post('/auto-suggest', checkAuth, async (req, res, next) => {
   try {
     const response = await UserService.getSuggestedUsers(req.body);
     return res.json({ users: response });
@@ -74,7 +80,7 @@ userRoutes.post('/auto-suggest', async (req, res, next) => {
 /**
  * Soft delete a User.
  */
-userRoutes.delete('/:id', async (req, res, next) => {
+userRoutes.delete('/:id', checkAuth, async (req, res, next) => {
   try {
     const { id } = req.params;
     const response = await UserService.deleteUser(id);
@@ -86,7 +92,7 @@ userRoutes.delete('/:id', async (req, res, next) => {
   }
 });
 
-userRoutes.post('/addUsersToGroup', async (req, res, next) => {
+userRoutes.post('/addUsersToGroup', checkAuth, async (req, res, next) => {
   try {
     const response = await UserGroupService.createUserGroup(req.body);
 

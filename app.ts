@@ -28,7 +28,7 @@ app.use((_, res, next) => {
 });
 
 app.use('/auth', authRoutes);
-app.use('/user', checkAuth, userRoutes);
+app.use('/user', userRoutes);
 app.use('/group', checkAuth, groupRoutes);
 
 app.use((error: any, req: Request, res: Response, _: NextFunction) => {
